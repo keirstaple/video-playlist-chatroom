@@ -1,7 +1,8 @@
 "use strict";
 
 var http = require('http'),
-    express = require('express');
+    express = require('express'),
+    socketIo = require('socket.io');
 
 const app = express();
 
@@ -42,6 +43,8 @@ app.get('/home', (request, response) => {
 });
 
 const server = new http.Server(app);
+//attaches itself to the http server
+const io = socketIo(server);
 
 const port = 3000
 server.listen(port, () => {
