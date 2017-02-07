@@ -5,14 +5,11 @@ var http = require('http'),
     socketIo = require('socket.io');
 
 const app = express();
-
 app.set("view engine", "pug");
 
 //middleware is wrapping something in the pipeline
 //browser -> node -> express -> M1 -> M2 -> M3 -> handler
 //        <-      <-         <-    <-    <- M3 <-
-
-
 app.use((request, response, next) =>{
   console.log('in middleware 1');
   //continues pipeline
@@ -44,6 +41,7 @@ app.get('/home', (request, response) => {
 
 const server = new http.Server(app);
 //attaches itself to the http server
+//io is applications view from the server...the servers application view into all of the clients that are connected
 const io = socketIo(server);
 
 const port = 3000
