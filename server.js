@@ -29,8 +29,19 @@ const server = new http.Server(app);
 const io = socketIo(server);
 
 //every time client connects, such as a refresh of the browser window, it will log out client connected
+//think of it as being connected to the socket on the client side in application.js
 io.on("connection", socket => {
   console.log('client connected');
+  socket.on("chat:add", data => {
+    console.log(data);
+    //don't use socket because it would only send to the one person that actually sent the data (only receive your own messages). Use io to send to every socket that's connected.
+    io.emit("chat:added", data);
+  });
+
+  //only applies to current socket we're looking at, not all sockets
+  socket.on("disconnect", () => {
+    console.log("socket disconnected");
+  });
 });
 
 const port = 3000
