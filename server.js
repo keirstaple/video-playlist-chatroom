@@ -10,23 +10,7 @@ app.set("view engine", "pug");
 //middleware is wrapping something in the pipeline
 //browser -> node -> express -> M1 -> M2 -> M3 -> handler
 //        <-      <-         <-    <-    <- M3 <-
-app.use((request, response, next) =>{
-  console.log('in middleware 1');
-  //continues pipeline
-  next();
-  //pipeline finishes
-  console.log('out of middleware 1');
-});
-
 app.use(express.static('./public'));
-
-app.use((request, response, next) =>{
-  console.log('in middleware 2');
-  //continues pipeline so that the rest of the code can be executed
-  next();
-  //pipeline finishes
-  console.log('out of middleware 2');
-});
 
 app.get('/', (request, response) => {
   //write out text to stream and end stream
@@ -43,6 +27,11 @@ const server = new http.Server(app);
 //attaches itself to the http server
 //io is applications view from the server...the servers application view into all of the clients that are connected
 const io = socketIo(server);
+
+//every time client connects, such as a refresh of the browser window, it will log out client connected
+io.on("connection", socket => {
+  console.log('client connected');
+});
 
 const port = 3000
 server.listen(port, () => {
